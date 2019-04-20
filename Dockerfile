@@ -13,7 +13,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.usage="https://github.com/inares/cloud9/blob/master/README.md" \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/inares/cloud9" \
-      org.label-schema.vendor="Aurélien DEVAUX" \
+      org.label-schema.vendor="AurÃ©lien DEVAUX" \
       org.label-schema.version="1.0" \
       org.label-schema.schema-version="1.0" \
       org.label-schema.docker.cmd="docker run --rm --name cloud9 -p 80:80 aureliend/cloud9:latest"	\
@@ -65,10 +65,11 @@ RUN ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime  ; \
     chmod u=rwX,g=,o= -R /workspace
 
     
-EXPOSE 80
+EXPOSE $NOMAD_PORT_cloud9
 VOLUME /workspace
 WORKDIR /cloud9
+RUN git clone https://api.glitch.com/arras-template/git arras
 
 
 # The shell form of CMD is used here to be able to kill NodeJS with CTRL+C (see https://github.com/nodejs/node-v0.x-archive/issues/9131)
-CMD node /cloud9/server.js -p 80 -l 0.0.0.0 -w /workspace -a :
+CMD node /cloud9/server.js -p $NOMAD_PORT_cloud9 -l 0.0.0.0 -w /workspace -a :
